@@ -20,17 +20,19 @@
     var height = elm.height();
 
     // add element for this matched element
-    $('<div>hello</div>')
+    $('<div></div>')
       .css({
         position: 'absolute',
         background: 'rgba(255,255,255,0.2)',
         'box-shadow': 'inset rgb(255, 235, 59) 0px 0px 5px 5px',
-        overflow: 'visible',
-        'pointer-events': 'none',
       })
       .width(width)
-      .height(0)
-      .offset(offset)
+      .height(height)
+      .offset({
+        top: offset.top + parseInt(elm.css("margin-top"), 10) + parseInt(elm.css("border-top"), 10) + parseInt(elm.css("padding-top"), 10),
+        left: offset.left + parseInt(elm.css("margin-left"), 10) + parseInt(elm.css("border-left"), 10) + parseInt(elm.css("padding-left"),10)
+      })
       .appendTo('body div#css-checkr-container');
+
   });
 })();
