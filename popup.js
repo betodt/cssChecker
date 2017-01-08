@@ -98,46 +98,16 @@ function renderStatus(statusText) {
 function bindHandlers() {
   var form = document.getElementById('selector-form');
 
-  chrome.tabs.executeScript(null, { file: "jquery-3.1.1.min.js" }, function () {
-    chrome.tabs.executeScript(null, { file: "pageSource.js" });
+  form.addEventListener('submit', function (e) {
+    var selector = document.querySelector('input[name="selector"]').value;
+
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) { 
+      chrome.tabs.sendMessage(tabs[0].id, { selector: selector }); 
+    });
+
+    e.preventDefault();
+    return false;
   });
-
-  form.addEventListener('submit', submitForm);
-}
-
-function submitForm(e) {
-  var selector = document.querySelector('input[name="selector"]').value;
-
-  window.postMessage({
-    type: 'FROM_EXT',
-    text: 'Hello from the extension'
-  });
-
-  e.preventDefault();
-  return false;
-}
-
-function alarmHandler(alarm) {
-  chrome.notifications.create(alarm.name, {
-    type: 'basic',
-    iconUrl: 'icon.png',
-    title: alarm.name,
-    message: alarm.name,
-    eventTime: alarm.scheduledTime,
-    buttons: [
-      {
-        title: 'Dismiss',
-        iconUrl: 'x.png'
-      }
-    ]
-  }, function (notificationId) {
-    console.log(notificationId);
-  });
-}
-
-function notificationButtonClickHandler(notificationId, buttonIndex) {
-  if (buttonIndex === 0)
-    chrome.notifications.clear(notificationId);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
