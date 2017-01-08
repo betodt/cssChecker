@@ -98,16 +98,19 @@ function renderStatus(statusText) {
 function bindHandlers() {
   var form = document.getElementById('selector-form');
 
+  chrome.tabs.executeScript(null, { file: "jquery-3.1.1.min.js" }, function () {
+    chrome.tabs.executeScript(null, { file: "pageSource.js" });
+  });
+
   form.addEventListener('submit', submitForm);
 }
 
 function submitForm(e) {
   var selector = document.querySelector('input[name="selector"]').value;
 
-  chrome.tabs.executeScript(null, { file: "jquery-3.1.1.min.js" }, function () {
-    chrome.tabs.executeScript(null, { code: "var elms = $('" + selector + "');"}, function () {
-      chrome.tabs.executeScript(null, { file: "pageSource.js" });
-    });
+  window.postMessage({
+    type: 'FROM_EXT',
+    text: 'Hello from the extension'
   });
 
   e.preventDefault();

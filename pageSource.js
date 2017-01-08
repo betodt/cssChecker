@@ -2,6 +2,10 @@
 (function () {
   "use strict";
 
+  window.addEventListener('message', function(e) {
+    console.log(e.data);
+  });
+
 
   // clear previous elements
   $("#css-checkr-container").remove();
